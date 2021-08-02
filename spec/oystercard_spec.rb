@@ -38,12 +38,20 @@ describe Oystercard do
   end
 
   it 'in_journey is false when not on a journey' do
-    expect(subject.journey).to eq(false)
+    expect(subject.state).to eq(false)
   end
 
   it 'touch_in changes in_journey? to true' do
     subject.touch_in
-    expect(subject.journey).to_not be(false)
+    expect(subject.state).to_not be(false)
   end
-
+  it "touch_out gives in_journey? to be false" do
+    subject.touch_out
+    expect(subject.state).to be(false)
+  end
+  it "checks the state of the journey" do
+    subject.touch_in
+    subject.touch_out
+    expect(subject).not_to be_in_journey
+  end
 end
