@@ -33,4 +33,17 @@ describe Oystercard do
     expect{subject.deduct(5)}.to change{subject.balance}.by -5
   end
 
+  it 'responds to in_journey?' do
+    expect(subject).to respond_to(:in_journey?)
+  end
+
+  it 'in_journey is false when not on a journey' do
+    expect(subject.journey).to eq(false)
+  end
+
+  it 'touch_in changes in_journey? to true' do
+    subject.touch_in
+    expect(subject.journey).to_not be(false)
+  end
+
 end
