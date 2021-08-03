@@ -1,6 +1,9 @@
 require 'oystercard'
 
 describe Oystercard do
+  before do
+    @station = double
+  end
 
   it 'responds to balance' do
     expect(subject).to respond_to(:balance)
@@ -38,25 +41,25 @@ describe Oystercard do
   end
 
   it 'in_journey is false when not on a journey' do
-    expect(subject.state).to eq(false)
+    expect(subject.in_journey?).to eq(false)
   end
 
   it 'touch_in changes in_journey? to true' do
     subject.top_up(10)
-    subject.touch_in
-    expect(subject.state).to_not be(false)
+    subject.touch_in(@station)
+    expect(subject.in_journey?).to eq(true)
   end
 
   it "checks the state of the journey" do
     subject.top_up(10)
-    subject.touch_in
+    subject.touch_in(@station)
     subject.touch_out
     expect(subject).not_to be_in_journey
   end
 
   it 'error raised with insufficient balance' do
     min_balance = Oystercard::MINIMUM_FARE
-    expect {subject.touch_in}.to raise_error("Balance of 0 does not meet minimum fare of #{min_balance}")
+    expect {subject.touch_in(@station)}.to raise_error("Balance of 0 does not meet minimum fare of #{min_balance}")
   end
   
   it 'expects touch_out to update deducted balance' do
