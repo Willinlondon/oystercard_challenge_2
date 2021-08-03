@@ -25,13 +25,13 @@ describe Oystercard do
     expect {subject.top_up(1)}.to raise_error("Exceeds the limit #{max_balance}")
   end
 
-  it 'responds to deduct' do
-    expect(subject).to respond_to(:deduct).with(1).argument
-  end
+ # it 'responds to deduct' do
+ #   expect(subject).to respond_to(:deduct).with(1).argument
+ # end
 
-  it "subtracts money from the oystercard" do
-    expect{subject.deduct(5)}.to change{subject.balance}.by -5
-  end
+ # it "subtracts money from the oystercard" do
+ #   expect{subject.deduct(5)}.to change{subject.balance}.by -5
+ # end
 
   it 'responds to in_journey?' do
     expect(subject).to respond_to(:in_journey?)
@@ -57,6 +57,10 @@ describe Oystercard do
   it 'error raised with insufficient balance' do
     min_balance = Oystercard::MINIMUM_FARE
     expect {subject.touch_in}.to raise_error("Balance of 0 does not meet minimum fare of #{min_balance}")
+  end
+  
+  it 'expects touch_out to update deducted balance' do
+    expect{subject.touch_out}.to change{subject.balance}.by -1
   end
 
 end
