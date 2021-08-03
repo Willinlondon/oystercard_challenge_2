@@ -42,16 +42,21 @@ describe Oystercard do
   end
 
   it 'touch_in changes in_journey? to true' do
+    subject.top_up(10)
     subject.touch_in
     expect(subject.state).to_not be(false)
   end
-  it "touch_out gives in_journey? to be false" do
-    subject.touch_out
-    expect(subject.state).to be(false)
-  end
+
   it "checks the state of the journey" do
+    subject.top_up(10)
     subject.touch_in
     subject.touch_out
     expect(subject).not_to be_in_journey
   end
+
+  it 'error raised with insufficient balance' do
+    min_balance = Oystercard::MINIMUM_FARE
+    expect {subject.touch_in}.to raise_error("Balance of 0 does not meet minimum fare of #{min_balance}")
+  end
+
 end

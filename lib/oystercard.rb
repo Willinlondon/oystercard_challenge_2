@@ -3,8 +3,9 @@ class Oystercard
   attr_reader :balance, :state
 
   MAX_AMOUNT = 90
+  MINIMUM_FARE = 1
 
-  def initialize()
+  def initialize
     @balance = 0
     @state = false
   end 
@@ -23,9 +24,12 @@ class Oystercard
   end
 
   def touch_in
+    raise "Balance of #{@balance} does not meet minimum fare of #{MINIMUM_FARE}" if @balance < MINIMUM_FARE
     @state = true
   end
+
   def touch_out
     @state = false 
   end
+
 end
