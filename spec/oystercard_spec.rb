@@ -4,6 +4,8 @@ describe Oystercard do
   before do
     @station = double
   end
+  
+  let(:journey){ { Start: @station, End: @station } }
 
   it 'responds to balance' do
     expect(subject).to respond_to(:balance)
@@ -11,6 +13,10 @@ describe Oystercard do
 
   it 'has a balance' do
     expect(subject.balance).to eq(0)
+  end
+
+  it 'checks it has no history of journeys' do
+    expect(subject.journeys).to be_empty
   end
 
   it "responds to top_up" do
@@ -53,7 +59,7 @@ describe Oystercard do
   it "checks the state of the journey" do
     subject.top_up(10)
     subject.touch_in(@station)
-    subject.touch_out
+    subject.touch_out(@station)
     expect(subject).not_to be_in_journey
   end
 
@@ -63,7 +69,14 @@ describe Oystercard do
   end
   
   it 'expects touch_out to update deducted balance' do
-    expect{subject.touch_out}.to change{subject.balance}.by -1
+    expect{subject.touch_out(@station)}.to change{subject.balance}.by -1
+  end
+  
+    it "checks that touch_out saves the journey" do
+    subject.top_up(10)
+    subject.touch_in(@station)
+    subject.touch_out(@station)
+    expect(subject.journeys).to include journey
   end
 
 end
