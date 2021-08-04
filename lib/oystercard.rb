@@ -1,3 +1,4 @@
+# require 'journey'
 class Oystercard
 
   attr_reader :balance, :station, :journeys
@@ -42,6 +43,6 @@ class Oystercard
   end
 
   def journey_log(entry, exit)
-      @journeys << { Start: entry, End: exit }
+      @journeys << Journey::log
   end
 end
